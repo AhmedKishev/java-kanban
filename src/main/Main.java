@@ -1,5 +1,10 @@
+package main;
+import task.Task;
+import task.Epic;
+import task.SubTask;
+import status.Status;
+import taskmanager.TaskManager;
 public class Main {
-
     public static void main(String[] args) {
         Task task = new Task("Доделать дз", "Что то там", Status.NEW);
         Task task1 = new Task("Пойти в магазин", "Тоже что то там", Status.NEW);
@@ -44,5 +49,7 @@ public class Main {
         System.out.println(taskManager.getAllSubTasks());
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getOfIdTask(task1));
+
     }
+
 }

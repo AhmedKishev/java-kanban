@@ -1,10 +1,13 @@
-import java.util.Objects;
+package task;
 
+import java.util.Objects;
+import status.Status;
 public class Task {
     protected String nameOfTask;
     protected Status status;
     protected final long id;
     protected String description;
+
 
     public Task(String nameOfTask, String description, Status status) {
         this.nameOfTask = nameOfTask;

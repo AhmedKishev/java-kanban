@@ -1,5 +1,6 @@
+package task;
 import java.util.ArrayList;
-
+import status.Status;
 public class Epic extends Task {
     private ArrayList<SubTask> subTasks = new ArrayList<>();
 
@@ -13,14 +14,14 @@ public class Epic extends Task {
         boolean isNew = true;
         boolean isDone = true;
         for (SubTask tmp : subTasks) {
-            if (tmp.getStatus() != Status.NEW) isNew = false;
-            if (tmp.getStatus() != Status.DONE) isDone = false;
+            if (tmp.getStatus() != status.NEW) isNew = false;
+            if (tmp.getStatus() != status.DONE) isDone = false;
         }
         if (isNew && !subTasks.isEmpty()) {
-            this.status = Status.NEW;
+            this.status = status.NEW;
         } else if (isDone && !subTasks.isEmpty()) {
-            this.status = Status.DONE;
-        } else this.status = Status.IN_PROGRESS;
+            this.status = status.DONE;
+        } else this.status = status.IN_PROGRESS;
     }
 
     public void addSubTask(SubTask subTask) {
