@@ -1,7 +1,7 @@
-package memoryManager;
+package memory;
 
-import historyManagerInterface.HistoryManager;
-import interfaceManager.TaskManager;
+import interfaces.TaskManager;
+import interfaces.HistoryManager;
 import task.Epic;
 import task.SubTask;
 import task.Task;

@@ -1,8 +1,8 @@
 package main;
 
-import historyManagerInterface.HistoryManager;
+import interfaces.HistoryManager;
 import managers.Managers;
-import memoryManager.InMemoryTaskManager;
+import memory.InMemoryTaskManager;
 import status.Status;
 import task.Epic;
 import task.SubTask;

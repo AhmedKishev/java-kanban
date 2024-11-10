@@ -1,6 +1,6 @@
-package memoryManager;
+package memory;
 
-import historyManagerInterface.HistoryManager;
+import interfaces.HistoryManager;
 import task.Task;
 
 import java.util.ArrayList;

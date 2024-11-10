@@ -1,6 +1,6 @@
-package interfaceManager;
+package interfaces;
 
-import historyManagerInterface.HistoryManager;
+import interfaces.HistoryManager;
 import task.Epic;
 import task.SubTask;
 import task.Task;

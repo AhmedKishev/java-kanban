@@ -1,4 +1,4 @@
-package memoryManager;
+package memory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
