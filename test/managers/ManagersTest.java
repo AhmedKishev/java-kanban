@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
-@Test
+    @Test
     public void notNull() {
-    InMemoryTaskManager inMemoryTaskManager=new InMemoryTaskManager();
-    Managers managers=new Managers(inMemoryTaskManager);
-    assertNotNull(managers);
-}
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        Managers managers = new Managers(inMemoryTaskManager);
+
+        assertNotNull(managers);
+    }
 }

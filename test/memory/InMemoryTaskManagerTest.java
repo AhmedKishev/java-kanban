@@ -12,24 +12,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
     private static InMemoryTaskManager inMemoryTaskManager;
+
+
     @BeforeEach
     public void createTaskManager() {
         inMemoryTaskManager=new InMemoryTaskManager();
     }
-@Test
+
+    @Test
     public void addTask() {
-    Task task=new Task("a","b", Status.NEW);
-    inMemoryTaskManager.addTask(task);
-    assertTrue(inMemoryTaskManager.getOfIdTask(task).equals(task));
-}
+        Task task = new Task("a", "b", Status.NEW);
+        inMemoryTaskManager.addTask(task);
+        assertTrue(inMemoryTaskManager.getOfIdTask(task).equals(task));
+    }
+
     @Test
     public void addSubTask() {
-        Epic epic=new Epic("a","b",Status.NEW);
-        SubTask task=new SubTask("a","b", Status.NEW,epic);
+        Epic epic = new Epic("a", "b", Status.NEW);
+        SubTask task = new SubTask("a", "b", Status.NEW, epic);
 
         inMemoryTaskManager.addSubTasks(task);
         assertTrue(inMemoryTaskManager.getOfIdSubTask(task).equals(task));
     }
+
     @Test
     public void addEpic() {
         Epic epic=new Epic("a","b",Status.NEW);
@@ -37,6 +42,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.addEpic(epic);
         assertTrue(inMemoryTaskManager.getOfIdEpic(epic).equals(epic));
     }
+
     @Test
     public void immutabilityTask() {
         Task task=new Task("a","b",Status.NEW);
@@ -45,6 +51,7 @@ class InMemoryTaskManagerTest {
         assertTrue(task.getNameOfTask().equals("a")&&
                 task.getDescription().equals("b")&&task.getStatus()==Status.NEW);
     }
+
     @Test
     public void updateTask() {
         Task task=new Task("a","b",Status.NEW);
@@ -54,6 +61,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.updateTask(task);
         assertTrue(Status.DONE==inMemoryTaskManager.getOfIdTask(task).getStatus());
     }
+
     @Test
     public void updateSubTask() {
         Epic epic=new Epic("a","b",Status.NEW);
@@ -64,6 +72,7 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.updateTask(subTask);
         assertTrue(Status.DONE==inMemoryTaskManager.getOfIdTask(subTask).getStatus());
     }
+
     @Test
     public void updateEpic() {
         Epic epic=new Epic("a","b",Status.NEW);
@@ -73,4 +82,5 @@ class InMemoryTaskManagerTest {
         inMemoryTaskManager.updateTask(epic);
         assertTrue(Status.DONE==inMemoryTaskManager.getOfIdTask(epic).getStatus());
     }
+
 }

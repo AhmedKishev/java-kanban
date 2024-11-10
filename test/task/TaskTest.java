@@ -9,17 +9,18 @@ import java.lang.reflect.Type;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
-    private static Task task=new Task("a","b", Status.NEW);
-@Test
+    private static Task task = new Task("a", "b", Status.NEW);
+
+
+    @Test
     public void matchesTask1AndTask2() {
-    Task task1=new Task("a","b",Status.NEW);
+        Task task1 = new Task("a", "b", Status.NEW);
+        assertTrue(task1.equals(task));
+    }
 
-    assertTrue(task1.equals(task));
-}
-@Test
+    @Test
     public void notMatchesTask1AndTask2() {
-    Task task1=new Task("c","d",Status.IN_PROGRESS);
-
-    assertFalse(task1.equals(task));
-}
+        Task task1 = new Task("c", "d", Status.IN_PROGRESS);
+        assertFalse(task1.equals(task));
+    }
 }

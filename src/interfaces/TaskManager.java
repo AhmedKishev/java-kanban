@@ -8,9 +8,13 @@ import task.Task;
 import java.util.ArrayList;
 
 public interface TaskManager {
+
     void addTask(Task task);
+
     void addEpic(Epic epic);
+
     HistoryManager getHistoryManager();
+
     void addSubTasks(SubTask subTask);
 
     ArrayList<Task> getAllTasks();

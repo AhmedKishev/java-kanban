@@ -40,29 +40,29 @@ public class InMemoryTaskManager <T extends Task> implements TaskManager{
 
     @Override
     public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> temp = new ArrayList<>();
+        ArrayList<Task> allTasks = new ArrayList<>();
         for (Task task : tasks.values()) {
-            temp.add(task);
+            allTasks.add(task);
         }
-        return temp;
+        return allTasks;
     }
 
     @Override
     public ArrayList<SubTask> getAllSubTasks() {
-        ArrayList<SubTask> temp = new ArrayList<>();
+        ArrayList<SubTask> allSubTusks = new ArrayList<>();
         for (SubTask subTask : subTasks.values()) {
-            temp.add(subTask);
+            allSubTusks.add(subTask);
         }
-        return temp;
+        return allSubTusks;
     }
 
     @Override
     public ArrayList<Epic> getAllEpics() {
-        ArrayList<Epic> temp = new ArrayList<>();
+        ArrayList<Epic> allEpics = new ArrayList<>();
         for (Epic epic : epics.values()) {
-            temp.add(epic);
+            allEpics.add(epic);
         }
-        return temp;
+        return allEpics;
     }
 
     @Override
