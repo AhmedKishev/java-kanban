@@ -16,6 +16,12 @@ public class Task {
         id = hashCode();
     }
 
+public String getDescription() {
+        return this.description;
+}
+    public String getNameOfTask() {
+        return this.nameOfTask;
+    }
     public void setStatus(Status status) {
         this.status = status;
     }

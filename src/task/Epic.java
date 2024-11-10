@@ -24,9 +24,16 @@ public class Epic extends Task {
         } else this.status = status.IN_PROGRESS;
     }
 
-    public void addSubTask(SubTask subTask) {
-        subTasks.add(subTask);
-        statusCheck();
+    public String addSubTask(Object subTask) {
+        String a=subTask.getClass().toString();
+        if (!subTask.getClass().toString().equals("class task.SubTask")) {
+           return "error";
+        } else {
+            SubTask subTask1=(SubTask) subTask;
+            subTasks.add(subTask1);
+            statusCheck();
+            return "not error";
+        }
     }
 
     @Override
