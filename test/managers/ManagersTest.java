@@ -1,6 +1,6 @@
-package Managers;
+package managers;
 
-import MemoryManager.InMemoryTaskManager;
+import memoryManager.InMemoryTaskManager;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

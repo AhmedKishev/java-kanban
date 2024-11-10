@@ -1,4 +1,4 @@
-package MemoryManager;
+package memoryManager;
 
 import org.junit.jupiter.api.Test;
 import status.Status;
