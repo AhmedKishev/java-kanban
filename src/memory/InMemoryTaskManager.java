@@ -15,7 +15,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     private HashMap<Long, Epic> epics = new HashMap<>();
     private HashMap<Long, SubTask> subTasks = new HashMap<>();
     private HistoryManager historyManager = new InMemoryHistoryManager();
-    private final static String WARNING = "Задачи с таким номером нету";
 
 
     @Override
@@ -81,7 +80,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
                 return task;
             }
         }
-        System.out.println(WARNING);
         return null;
     }
 
@@ -94,7 +92,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
                 return subTask;
             }
         }
-        System.out.println(WARNING);
         return null;
     }
 
@@ -107,7 +104,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
                 return epic;
             }
         }
-        System.out.println(WARNING);
         return null;
     }
 
@@ -207,7 +203,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
         for (Epic epic : epics.values()) {
             if (epic.getId() == id) return epic.getSubTasks();
         }
-        System.out.println(WARNING);
         return null;
     }
 }
