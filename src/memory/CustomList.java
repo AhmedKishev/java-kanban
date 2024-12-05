@@ -11,20 +11,20 @@ public class CustomList {
 
 
     private Node checkTaskInList(Node newTask) {
-        Node tmp = head;
-        while (tmp != null) {
-            if (tmp.count == newTask.count) return tmp;
-            tmp = tmp.next;
+        Node It = head;
+        while (It != null) {
+            if (It.count == newTask.count) return It;
+            It = It.next;
         }
         return null;
     }
 
     public ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-        Node tmp = head;
-        while (tmp != null) {
-            tasks.add(tmp.count);
-            tmp = tmp.next;
+        Node It = head;
+        while (It != null) {
+            tasks.add(It.count);
+            It = It.next;
         }
         return tasks;
     }
@@ -67,11 +67,11 @@ public class CustomList {
     }
 
     public void remove(Node node) {
-        Node tmp = head;
-        while (tmp != null) {
-            if (node.count == tmp.count) {
-                Node left = tmp.prev;
-                Node right = tmp.next;
+        Node It = head;
+        while (It != null) {
+            if (node.count == It.count) {
+                Node left = It.prev;
+                Node right = It.next;
                 if (left != null) {
                     left.next = right;
                 }
@@ -80,7 +80,7 @@ public class CustomList {
                 }
                 return;
             }
-            tmp = tmp.next;
+            It = It.next;
         }
     }
 }
