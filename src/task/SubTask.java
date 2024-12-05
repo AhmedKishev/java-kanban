@@ -1,4 +1,5 @@
 package task;
+
 import status.Status;
 
 
@@ -8,7 +9,7 @@ public class SubTask extends Task {
 
     public SubTask(String nameOfTask, String description, Status status, Object object) {
         super(nameOfTask, description, status);
-        String a=object.getClass().toString();
+        String a = object.getClass().toString();
         if (a.equals("class task.Epic")) {
             this.epic = (Epic) object;
         }
@@ -17,10 +18,11 @@ public class SubTask extends Task {
     public Epic getEpic() {
         return epic;
     }
+
     public void setEpic(Object o) {
-        String a=o.getClass().toString();
+        String a = o.getClass().toString();
         if (a.equals("class task.Epic")) {
-            this.epic=epic;
+            this.epic = epic;
         }
 
     }
