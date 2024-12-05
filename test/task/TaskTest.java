@@ -1,10 +1,8 @@
 package task;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import status.Status;
 
-import java.lang.reflect.Type;
 
 import static org.junit.jupiter.api.Assertions.*;
 

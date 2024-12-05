@@ -10,7 +10,7 @@ public class SubTask extends Task {
         super(nameOfTask, description, status);
         String a=object.getClass().toString();
         if (a.equals("class task.Epic")) {
-            this.epic = epic;
+            this.epic = (Epic) object;
         }
     }
 

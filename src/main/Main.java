@@ -10,30 +10,24 @@ import task.Task;
 
 public class Main {
     public static void main(String[] args) {
-         Task task=new Task("a","b", Status.NEW);
-         Task task1=new Task("c","d",Status.NEW);
-         Epic epic=new Epic("a","b",Status.IN_PROGRESS);
-        SubTask subTask=new SubTask("c","d",Status.DONE,epic);
-        InMemoryTaskManager inMemoryTaskManager=new InMemoryTaskManager();
+        Task task = new Task("a", "b", Status.NEW);
+        Task task1 = new Task("c", "d", Status.NEW);
+        Epic epic = new Epic("a", "b", Status.IN_PROGRESS);
+        SubTask subTask = new SubTask("c", "d", Status.DONE, epic);
+        epic.addSubTask(subTask);
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
         inMemoryTaskManager.addTask(task);
         inMemoryTaskManager.addTask(task1);
         inMemoryTaskManager.addEpic(epic);
-        inMemoryTaskManager.addSubTasks(subTask);
         inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdSubTask(subTask);
+        inMemoryTaskManager.getOfIdTask(task1);
         inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        inMemoryTaskManager.getOfIdTask(task);
-        Managers managers=new Managers(inMemoryTaskManager);
-        HistoryManager inMemoryHistoryManager=Managers.getDefaultHistory();
-        for (int i = 0; i <inMemoryHistoryManager.getHistory().size(); i++) {
+        inMemoryTaskManager.getOfIdEpic(epic);
+        inMemoryTaskManager.getOfIdTask(task1);
+        inMemoryTaskManager.deleteOfIdEpic(epic);
+        Managers managers = new Managers(inMemoryTaskManager);
+        HistoryManager inMemoryHistoryManager = managers.getDefaultHistory();
+        for (int i = 0; i < inMemoryHistoryManager.getHistory().size(); i++) {
             System.out.println(inMemoryHistoryManager.getHistory().get(i));
         }
     }
