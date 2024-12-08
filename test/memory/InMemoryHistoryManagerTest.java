@@ -12,36 +12,36 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void dataStorageAfterHistoryManager() {
-        Task task = new Task("a", "b", Status.NEW);
-        InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+        Task original = new Task("a", "b", Status.NEW);
+        InMemoryHistoryManager history = new InMemoryHistoryManager();
 
-        inMemoryHistoryManager.add(task);
-        Task task1 = inMemoryHistoryManager.getHistory().get(0);
-        assertTrue(task1.getDescription().equals(task.getDescription()) &&
-                task1.getNameOfTask().equals(task.getNameOfTask()) &&
-                task1.getStatus() == task.getStatus());
+        history.add(original);
+        Task copy = history.getHistory().get(0);
+        assertTrue(copy.getDescription().equals(original.getDescription()) &&
+                copy.getNameOfTask().equals(original.getNameOfTask()) &&
+                copy.getStatus() == original.getStatus());
     }
 
     @Test
     public void correctSequenceOfTasks() {
-        Task task = new Task("a", "b", Status.NEW);
-        Task task1 = new Task("c", "d", Status.NEW);
-        InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+        Task watch = new Task("a", "b", Status.NEW);
+        Task watch1 = new Task("c", "d", Status.NEW);
+        InMemoryHistoryManager history = new InMemoryHistoryManager();
 
-        inMemoryHistoryManager.add(task);
-        inMemoryHistoryManager.add(task1);
-        inMemoryHistoryManager.add(task);
-        ArrayList<Task> watchTasks = inMemoryHistoryManager.getHistory();
-        assertTrue(task1.equals(watchTasks.get(0)) && task.equals(watchTasks.get(1)));
+        history.add(watch);
+        history.add(watch1);
+        history.add(watch);
+        ArrayList<Task> watchTasks = history.getHistory();
+        assertTrue(watch1.equals(watchTasks.get(0)) && watch.equals(watchTasks.get(1)));
     }
 
 
     @Test
     public void equalsTaskAndElementHistoryManager() {
-        Task task = new Task("a", "b", Status.NEW);
+        Task original = new Task("a", "b", Status.NEW);
         InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
-        inMemoryHistoryManager.add(task);
-        assertTrue(inMemoryHistoryManager.getHistory().get(0).equals(task));
+        inMemoryHistoryManager.add(original);
+        assertTrue(inMemoryHistoryManager.getHistory().get(0).equals(original));
     }
 }

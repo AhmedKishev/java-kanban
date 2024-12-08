@@ -26,9 +26,9 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     public void addEpic(Epic epic) {
         epics.put(epic.getId(), epic);
         List<SubTask> subTasks = epic.getSubTasks();
-        for (int i = 0; i < subTasks.size(); i++) { //добавляем из эпика сабтаски, если их еще нету в мапе
-            if (!this.subTasks.containsKey(subTasks.get(i).getId())) {
-                this.subTasks.put(subTasks.get(i).getId(), subTasks.get(i));
+        for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
+            if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
+                this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
             }
         }
     }
@@ -171,28 +171,28 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
 
     @Override
     public void deleteOfAllTasks() {
-        for (int i = 0; i < tasks.size(); i++) {
-            historyManager.remove(tasks.get(i).getId());
+        for (int itForDeleteTasks = 0; itForDeleteTasks < tasks.size(); itForDeleteTasks++) {
+            historyManager.remove(tasks.get(itForDeleteTasks).getId());
         }
         tasks.clear();
     }
 
     @Override
     public void deleteOfAllEpics() {
-        for (int i = 0; i < epics.size(); i++) {
-            historyManager.remove(epics.get(i).getId());
+        for (int itForDeleteEpics = 0; itForDeleteEpics < epics.size(); itForDeleteEpics++) {
+            historyManager.remove(epics.get(itForDeleteEpics).getId());
         }
         epics.clear();
-        for (int i = 0; i < subTasks.size(); i++) {
-            historyManager.remove(subTasks.get(i).getId());
+        for (int itForDeleteSubTasks = 0; itForDeleteSubTasks < subTasks.size(); itForDeleteSubTasks++) {
+            historyManager.remove(subTasks.get(itForDeleteSubTasks).getId());
         }
         subTasks.clear();
     }
 
     @Override
     public void deleteOfAllSubTasks() {
-        for (int i = 0; i < subTasks.size(); i++) {
-            historyManager.remove(subTasks.get(i).getId());
+        for (int itForDeleteSubTasks = 0; itForDeleteSubTasks < subTasks.size(); itForDeleteSubTasks++) {
+            historyManager.remove(subTasks.get(itForDeleteSubTasks).getId());
         }
         deleteOfAllEpics();
     }

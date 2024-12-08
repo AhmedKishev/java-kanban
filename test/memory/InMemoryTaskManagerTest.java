@@ -13,102 +13,102 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    private static InMemoryTaskManager inMemoryTaskManager;
+    private static InMemoryTaskManager taskManager;
 
 
     @BeforeEach
     public void createTaskManager() {
-        inMemoryTaskManager = new InMemoryTaskManager();
+        taskManager = new InMemoryTaskManager();
     }
 
     @Test
     public void addTask() {
-        Task task = new Task("a", "b", Status.NEW);
-        inMemoryTaskManager.addTask(task);
-        assertTrue(inMemoryTaskManager.getOfIdTask(task).equals(task));
+        Task addedTask = new Task("a", "b", Status.NEW);
+        taskManager.addTask(addedTask);
+        assertTrue(taskManager.getOfIdTask(addedTask).equals(addedTask));
     }
 
     @Test
     public void addSubTask() {
-        Epic epic = new Epic("a", "b", Status.NEW);
-        SubTask task = new SubTask("a", "b", Status.NEW, epic);
+        Epic epicForAddedSubTask = new Epic("a", "b", Status.NEW);
+        SubTask addedSubTask = new SubTask("a", "b", Status.NEW, epicForAddedSubTask);
 
-        inMemoryTaskManager.addSubTasks(task);
-        assertTrue(inMemoryTaskManager.getOfIdSubTask(task).equals(task));
+        taskManager.addSubTasks(addedSubTask);
+        assertTrue(taskManager.getOfIdSubTask(addedSubTask).equals(addedSubTask));
     }
 
     @Test
-    public void taskIdToBeDeleted() {
-        InMemoryTaskManager inMemoryHistoryManager = new InMemoryTaskManager();
-        Epic epic = new Epic("a", "b", Status.NEW);
-        SubTask subTask = new SubTask("a", "b", Status.NEW, epic);
-        inMemoryHistoryManager.addSubTasks(subTask);
-        inMemoryHistoryManager.deleteOfIdSubTask(subTask);
+    public void SubTaskIdToBeDeleted() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        Epic forSubTaskId = new Epic("a", "b", Status.NEW);
+        SubTask deleteSubTaskId = new SubTask("a", "b", Status.NEW, forSubTaskId);
+        taskManager.addSubTasks(deleteSubTaskId);
+        taskManager.deleteOfIdSubTask(deleteSubTaskId);
 
 
-        assertNull(inMemoryHistoryManager.getOfIdSubTask(subTask));
+        assertNull(taskManager.getOfIdSubTask(deleteSubTaskId));
     }
 
     @Test
     public void notActualSubTask() {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
-        Epic epic = new Epic("a", "b", Status.NEW);
-        SubTask subTask = new SubTask("a", "b", Status.NEW, epic);
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        Epic forSubTask = new Epic("a", "b", Status.NEW);
+        SubTask subTask = new SubTask("a", "b", Status.NEW, forSubTask);
 
-        epic.addSubTask(subTask);
-        inMemoryTaskManager.addSubTasks(subTask);
-        inMemoryTaskManager.addEpic(epic);
-        inMemoryTaskManager.deleteOfIdSubTask(subTask);
-        List<Epic> epics = inMemoryTaskManager.getAllEpics();
-        assertTrue(epics.get(0).getSubTasks().isEmpty());
+        forSubTask.addSubTask(subTask);
+        taskManager.addSubTasks(subTask);
+        taskManager.addEpic(forSubTask);
+        taskManager.deleteOfIdSubTask(subTask);
+        List<Epic> emptyEpics = taskManager.getAllEpics();
+        assertTrue(emptyEpics.get(0).getSubTasks().isEmpty());
     }
 
     @Test
     public void addEpic() {
-        Epic epic = new Epic("a", "b", Status.NEW);
+        Epic add = new Epic("a", "b", Status.NEW);
 
-        inMemoryTaskManager.addEpic(epic);
-        assertTrue(inMemoryTaskManager.getOfIdEpic(epic).equals(epic));
+        taskManager.addEpic(add);
+        assertTrue(taskManager.getOfIdEpic(add).equals(add));
     }
 
     @Test
     public void immutabilityTask() {
         Task task = new Task("a", "b", Status.NEW);
 
-        inMemoryTaskManager.addTask(task);
+        taskManager.addTask(task);
         assertTrue(task.getNameOfTask().equals("a") &&
                 task.getDescription().equals("b") && task.getStatus() == Status.NEW);
     }
 
     @Test
     public void updateTask() {
-        Task task = new Task("a", "b", Status.NEW);
+        Task update = new Task("a", "b", Status.NEW);
 
-        inMemoryTaskManager.addTask(task);
-        task.setStatus(Status.DONE);
-        inMemoryTaskManager.updateTask(task);
-        assertTrue(Status.DONE == inMemoryTaskManager.getOfIdTask(task).getStatus());
+        taskManager.addTask(update);
+        update.setStatus(Status.DONE);
+        taskManager.updateTask(update);
+        assertTrue(Status.DONE == taskManager.getOfIdTask(update).getStatus());
     }
 
     @Test
     public void updateSubTask() {
-        Epic epic = new Epic("a", "b", Status.NEW);
-        SubTask subTask = new SubTask("a", "b", Status.NEW, epic);
+        Epic forSubTask = new Epic("a", "b", Status.NEW);
+        SubTask update = new SubTask("a", "b", Status.NEW, forSubTask);
 
-        inMemoryTaskManager.addSubTasks(subTask);
-        subTask.setStatus(Status.DONE);
-        inMemoryTaskManager.updateTask(subTask);
-        assertTrue(Status.DONE == inMemoryTaskManager.getOfIdTask(subTask).getStatus());
+        taskManager.addSubTasks(update);
+        update.setStatus(Status.DONE);
+        taskManager.updateTask(update);
+        assertTrue(Status.DONE == taskManager.getOfIdTask(update).getStatus());
     }
 
     @Test
     public void updateEpic() {
-        Epic epic = new Epic("a", "b", Status.NEW);
+        Epic update = new Epic("a", "b", Status.NEW);
 
-        inMemoryTaskManager.addEpic(epic);
-        epic.setStatus(Status.DONE);
-        inMemoryTaskManager.updateTask(epic);
-        assertTrue(Status.DONE == inMemoryTaskManager.getOfIdTask(epic).getStatus());
+        taskManager.addEpic(update);
+        update.setStatus(Status.DONE);
+        taskManager.updateTask(update);
+        assertTrue(Status.DONE == taskManager.getOfIdTask(update).getStatus());
     }
 
 }
