@@ -13,4 +13,5 @@ class ManagersTest {
 
         assertNotNull(managers);
     }
+
 }

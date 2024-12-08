@@ -1,7 +1,9 @@
 package task;
 
 import java.util.Objects;
+
 import status.Status;
+
 public class Task {
     protected String nameOfTask;
     protected Status status;
@@ -16,12 +18,14 @@ public class Task {
         id = hashCode();
     }
 
-public String getDescription() {
+    public String getDescription() {
         return this.description;
-}
+    }
+
     public String getNameOfTask() {
         return this.nameOfTask;
     }
+
     public void setStatus(Status status) {
         this.status = status;
     }
