@@ -36,12 +36,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "nameOfTask='" + nameOfTask + '\'' +
-                ", status=" + status +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                '}';
+        return id + ",Task," + nameOfTask + "," + status + ",Description:" + description + ",";
     }
 
     public long getId() {
