@@ -10,39 +10,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class InMemoryTaskManager<T extends Task> implements TaskManager {
-    protected HashMap<Long, Task> tasks = new HashMap<>();
-    protected HashMap<Long, Epic> epics = new HashMap<>();
-    protected HashMap<Long, SubTask> subTasks = new HashMap<>();
-    protected HistoryManager historyManager = new InMemoryHistoryManager();
+    private HashMap<Long, Task> tasks = new HashMap<>();
+    private HashMap<Long, Epic> epics = new HashMap<>();
+    private HashMap<Long, SubTask> subTasks = new HashMap<>();
+    private HistoryManager historyManager = new InMemoryHistoryManager();
 
 
     @Override
     public void addTask(Task task) {
-        boolean isTask = false;
-        for (Long key : tasks.keySet()) {
-            if (tasks.get(key).getNameOfTask().equals(task.getNameOfTask())) {
-                isTask = true;
-                break;
-            }
-        }
-        if (!isTask) tasks.put(task.getId(), task);
+        tasks.put(task.getId(), task);
     }
 
     @Override
     public void addEpic(Epic epic) {
+        epics.put(epic.getId(), epic);
         List<SubTask> subTasks = epic.getSubTasks();
-        boolean isEpic = false;
-        for (Long key : epics.keySet()) {
-            if (epics.get(key).getNameOfTask().equals(epic.getNameOfTask())) isEpic = true;
-        }
-        if (!isEpic) {
-            epics.put(epic.getId(), epic);
-            for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
-                if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
-                    this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
-                }
+        for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
+            if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
+                this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
             }
         }
     }

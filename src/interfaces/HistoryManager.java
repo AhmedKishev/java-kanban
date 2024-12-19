@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 
 public interface HistoryManager {
-    void add(Task task);
+    public void add(Task task);
 
-    ArrayList<Task> getHistory();
+    public ArrayList<Task> getHistory();
 
     void remove(Long id);
 
