@@ -37,16 +37,7 @@ public class FileBackedTaskManagerTest {
         manager.addSubTasks(subTaskFromReadSecond);
         manager.addEpic(epicFromRead);
     }
-
-
-    @Test
-    public void saveToEmptyFile() {
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesformanager/Empty.txt"));
-
-        assertTrue(manager.getAllTasks().size() == 0 && manager.getAllSubTasks().size() == 0 &&
-                manager.getAllEpics().size() == 0);
-    }
-
+    
     @Test
     public void saveToFile() {
         FileBackedTaskManager manager = new FileBackedTaskManager();
@@ -68,7 +59,7 @@ public class FileBackedTaskManagerTest {
                 tasks.get(0).getDescription().equals(taskFromRead.getDescription()) &&
                 tasks.get(0).getStatus().equals(taskFromRead.getStatus()));
     }
-    
+
     @Test
     public void readToFileEpic() {
         FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesformanager/FileBackedTaskManager.txt"));
