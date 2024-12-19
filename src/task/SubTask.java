@@ -29,11 +29,6 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "nameOfTask='" + nameOfTask + '\'' +
-                ", status=" + status +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                '}';
+        return id + ",SubTask," + nameOfTask + "," + status + ",Description:" + description + "," + epic.getNameOfTask();
     }
 }
