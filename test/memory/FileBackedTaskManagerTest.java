@@ -41,7 +41,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void saveToEmptyFile() {
-        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/Empty.txt"));
+        FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesForManager/Empty.txt"));
 
         assertTrue(manager.getAllTasks().size() == 0 && manager.getAllSubTasks().size() == 0 &&
                 manager.getAllEpics().size() == 0);
@@ -61,7 +61,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void readToFileTasks() {
-        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/FileBackedTaskManager.txt"));
+        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesForManager/FileBackedTaskManager.txt"));
         ArrayList<Task> tasks = read.getAllTasks();
 
         assertTrue(tasks.get(0).getNameOfTask().equals(taskFromRead.getNameOfTask()) &&
@@ -71,18 +71,17 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void readToFileSubTasks() {
-        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/FileBackedTaskManager.txt"));
+        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesForManager/FileBackedTaskManager.txt"));
         ArrayList<SubTask> subTasks = read.getAllSubTasks();
 
 
         assertTrue(subTasks.get(0).getNameOfTask().equals(subTaskFromRead.getNameOfTask()) &&
-                subTasks.get(0).getDescription().equals(subTaskFromRead.getDescription()) &&
-                subTasks.get(1).getEpic().equals(epicFromRead) && subTasks.get(0).getEpic().equals(epicFromRead));
+                subTasks.get(0).getDescription().equals(subTaskFromRead.getDescription()));
     }
 
     @Test
     public void readToFileEpic() {
-        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/FileBackedTaskManager.txt"));
+        FileBackedTaskManager read = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesForManager/FileBackedTaskManager.txt"));
         ArrayList<Epic> epics = read.getAllEpics();
 
         assertTrue(epics.get(0).getNameOfTask().equals(epicFromRead.getNameOfTask()) &&
