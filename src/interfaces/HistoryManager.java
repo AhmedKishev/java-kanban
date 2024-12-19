@@ -5,7 +5,6 @@ import memory.Node;
 
 import java.util.ArrayList;
 
-
 public interface HistoryManager {
     public void add(Task task);
 

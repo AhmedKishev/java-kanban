@@ -6,7 +6,6 @@ import interfaces.TaskManager;
 public class Managers<T extends TaskManager> {
     private static TaskManager taskManager;
 
-
     public Managers(T n) {
         this.taskManager = n;
     }
