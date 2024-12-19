@@ -23,7 +23,6 @@ public class Main {
         inMemoryTaskManager.addTask(task1);
         inMemoryTaskManager.addSubTasks(subTask);
         inMemoryTaskManager.addSubTasks(subTask1);
-        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/FileBackedTaskManager.txt"));
     }
 
 }

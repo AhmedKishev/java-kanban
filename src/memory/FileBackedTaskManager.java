@@ -125,7 +125,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public void save() {
-        File fileForManager = new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/FilesForManager/FileBackedTaskManager.txt");
+        File fileForManager = new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesformanager/FileBackedTaskManager.txt");
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileForManager))) {
             for (Object taskId : tasks.keySet()) {
                 bufferedWriter.write(tasks.get(taskId).toString() + "\n");
