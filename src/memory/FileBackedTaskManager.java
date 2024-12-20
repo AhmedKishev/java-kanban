@@ -150,13 +150,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             FileBackedTaskManager loadTasks = new FileBackedTaskManager();
             while ((bufferedReader.read() != ' ' && bufferedReader.ready())) {
-                StringBuilder line = new StringBuilder(bufferedReader.readLine());
-                line.delete(0, line.indexOf(",") + 1);
-                String type = line.substring(0, line.indexOf(","));
-                line.delete(0, line.indexOf(",") + 1);
-                String nameTask = line.substring(0, line.indexOf(","));
-                line.delete(0, line.indexOf(",") + 1);
-                String statusTask = line.substring(0, line.indexOf(","));
+                String line[] = bufferedReader.readLine().split(",");
+                String type = line[1];
+                String nameTask = line[2];
+                String statusTask = line[3];
                 Status status = Status.NEW;
                 switch (statusTask) {
                     case "DONE":
@@ -169,14 +166,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         status = Status.NEW;
                         break;
                 }
-                line.delete(0, line.indexOf(",") + 1);
-                line.delete(0, line.indexOf(":") + 1);
-                String discriptionTask = line.substring(0, line.indexOf(","));
-                line.delete(0, line.indexOf(",") + 1);
+                String discriptionTask = line[4];
                 String epicName = null;
-                if (line.length() != 0) {
-                    epicName = line.substring(0, line.length());
-                    line.delete(0, line.length());
+                if (line.length > 5) {
+                    epicName = line[5];
                 }
                 if (type.equals("Epic")) {
                     Epic epicFromFile = new Epic(nameTask, discriptionTask, status);
