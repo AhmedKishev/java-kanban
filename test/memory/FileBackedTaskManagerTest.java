@@ -11,7 +11,10 @@ public class FileBackedTaskManagerTest {
     @Test
     public void testException() {
         assertDoesNotThrow(() -> {
-            File file = new File("C:/Users/Astemir/IdeaProjects/java-kanban/src/filesformanager/FileBackedTaskManager.txt");
+            File filePath = new File("Save");
+            filePath.mkdir();
+            File file = new File(filePath + "\\test.txt");
+            file.createNewFile();
             InMemoryTaskManager inMemoryTaskManager = FileBackedTaskManager.loadFromFile(file);
         }, "Не удалось открыть файл");
     }
