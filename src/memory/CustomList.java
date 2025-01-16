@@ -69,7 +69,7 @@ public class CustomList {
     public void remove(Node node) {
         Node it = head;
         while (it != null) {
-            if (node.count == it.count) {
+            if (node.count.equals(it.count)) {
                 Node left = it.prev;
                 Node right = it.next;
                 if (left != null) {
@@ -77,6 +77,9 @@ public class CustomList {
                 }
                 if (right != null) {
                     right.prev = left;
+                }
+                if (left == null && right == null) {
+                    head = tail = null;
                 }
                 return;
             }

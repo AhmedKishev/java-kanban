@@ -8,7 +8,10 @@ import task.SubTask;
 import task.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -36,17 +39,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return super.getAllTasks();
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubTasks() {
+    public List<SubTask> getAllSubTasks() {
         return super.getAllSubTasks();
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return super.getAllEpics();
     }
 
@@ -176,18 +179,31 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     loadTasks.addEpic(epicFromFile);
                 } else if (type.equals("SubTask")) {
                     Epic epicForSubTask = null;
-                    ArrayList<Epic> epics = loadTasks.getAllEpics();
+                    List<Epic> epics = loadTasks.getAllEpics();
                     for (int i = 0; i < epics.size(); i++) {
                         if (epics.get(i).getNameOfTask().equals(epicName)) {
                             epicForSubTask = epics.get(i);
                             break;
                         }
                     }
-                    SubTask subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask);
+                    SubTask subTaskFromFile;
+                    if (line.length == 8) {
+                        LocalDateTime startTime = LocalDateTime.parse(line[6]);
+                        ;
+                        LocalDateTime endTime = LocalDateTime.parse(line[7]);
+                        Duration duration = Duration.between(startTime, endTime);
+                        subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask, duration, startTime);
+                    } else subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask);
                     epicForSubTask.addSubTask(subTaskFromFile);
                     loadTasks.addSubTasks(subTaskFromFile);
                 } else if (type.equals("Task")) {
-                    Task taskFromFile = new Task(nameTask, discriptionTask, status);
+                    Task taskFromFile;
+                    if (line.length == 8) {
+                        LocalDateTime startTime = LocalDateTime.parse(line[6]);
+                        LocalDateTime endTime = LocalDateTime.parse(line[7]);
+                        Duration duration = Duration.between(startTime, endTime);
+                        taskFromFile = new Task(nameTask, discriptionTask, status, startTime, duration);
+                    } else taskFromFile = new Task(nameTask, discriptionTask, status);
                     loadTasks.addTask(taskFromFile);
                 }
             }

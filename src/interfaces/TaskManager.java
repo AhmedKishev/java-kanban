@@ -1,11 +1,12 @@
 package interfaces;
 
-import interfaces.HistoryManager;
 import task.Epic;
 import task.SubTask;
 import task.Task;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -17,11 +18,11 @@ public interface TaskManager {
 
     void addSubTasks(SubTask subTask);
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<SubTask> getAllSubTasks();
+    List<SubTask> getAllSubTasks();
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
     Task getOfIdTask(Task t);
 
@@ -39,7 +40,11 @@ public interface TaskManager {
 
     void deleteOfIdSubTask(SubTask s);
 
+    boolean intersectionOfTime(Task task);
+
     void deleteOfIdEpic(Epic e);
+
+    TreeSet<Task> getPrioritizedTasks();
 
     void deleteOfAllTasks();
 

@@ -1,16 +1,19 @@
 package task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import status.Status;
 
 public class Epic extends Task {
     private ArrayList<SubTask> subTasks = new ArrayList<>();
-
+    private LocalDateTime endTime;
 
     public Epic(String nameOfTask, String description, Status status) {
         super(nameOfTask, description, status);
-
     }
 
     public void statusCheck() {
@@ -34,9 +37,46 @@ public class Epic extends Task {
         } else {
             SubTask subTask1 = (SubTask) subTask;
             subTasks.add(subTask1);
+            if (subTask1.getStartTime() != null) {
+                findEndTime();
+                findStartTime();
+            }
             statusCheck();
             return "not error";
         }
+    }
+
+    public void findEndTime() {
+        Comparator<SubTask> comparatorForSubTask = (o1, o2) -> {
+            if (o1.getStartTime().isBefore(o2.getStartTime())) return 1;
+            return -1;
+        };
+        List<SubTask> subTasksWithTime = subTasks.stream().filter(
+                subTask -> subTask.getStartTime() != null
+        ).collect(Collectors.toList());
+        subTasksWithTime.sort(comparatorForSubTask);
+        endTime = subTasksWithTime.getFirst().getEndTime();
+    }
+
+
+    public void findStartTime() {
+        Comparator<SubTask> comparatorForSubTask = (o1, o2) -> {
+            if (o2.getStartTime().isBefore(o1.getStartTime())) return 1;
+            else return -1;
+        };
+        List<SubTask> subTasksWithTime = subTasks.stream().filter(
+                subTask -> subTask.getStartTime() != null
+        ).collect(Collectors.toList());
+        subTasksWithTime.sort(comparatorForSubTask);
+        startTime = subTasksWithTime.getFirst().getStartTime();
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     public long getId() {
@@ -45,6 +85,9 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
+        if (startTime != null) {
+            return id + ",Epic," + nameOfTask + "," + status + "," + description + "," + startTime + "," + endTime + ",";
+        }
         return id + ",Epic," + nameOfTask + "," + status + "," + description + ",";
     }
 
