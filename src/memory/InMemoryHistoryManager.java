@@ -3,30 +3,37 @@ package memory;
 import interfaces.HistoryManager;
 import task.Task;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private ArrayList<Task> history=new ArrayList<>();
-
+    private CustomList customList = new CustomList();
+    private Map<Long, Node> tasks = new HashMap<>();
 
     @Override
     public void add(Task task) {
-        if (history.size() == 11) {
-            history.remove(10);
-        }
-        history.add(task);
+        Node node = new Node(task);
+        customList.linkLast(node);
+        if (tasks.containsKey(task.getId())) remove(task.getId());
+        tasks.put(task.getId(), node);
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        if (history.isEmpty()) return null;
+        if (customList.getTasks().isEmpty()) return null;
         else {
-            ArrayList<Task> lastTenViewedTasks = new ArrayList<>();
-            for (int i = 0; i < history.size(); i++) {
-                if (i == 10) break;
-                lastTenViewedTasks.add(history.get(i));
-            }
-            return lastTenViewedTasks;
+            return customList.getTasks();
         }
     }
+
+    @Override
+    public void remove(Long id) {
+        tasks.remove(id);
+    }
+
+
+    public void removeNode(Node node) {
+        customList.remove(node);
+    }
+
+
 }

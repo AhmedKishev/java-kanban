@@ -1,6 +1,9 @@
 package task;
+
 import java.util.ArrayList;
+
 import status.Status;
+
 public class Epic extends Task {
     private ArrayList<SubTask> subTasks = new ArrayList<>();
 
@@ -25,11 +28,11 @@ public class Epic extends Task {
     }
 
     public String addSubTask(Object subTask) {
-        String a=subTask.getClass().toString();
+        String a = subTask.getClass().toString();
         if (!subTask.getClass().toString().equals("class task.SubTask")) {
-           return "error";
+            return "error";
         } else {
-            SubTask subTask1=(SubTask) subTask;
+            SubTask subTask1 = (SubTask) subTask;
             subTasks.add(subTask1);
             statusCheck();
             return "not error";
@@ -47,4 +50,9 @@ public class Epic extends Task {
     public ArrayList<SubTask> getSubTasks() {
         return subTasks;
     }
+
+    public void removeSubTask(SubTask subTask) {
+        subTasks.remove(subTask);
+    }
+
 }
