@@ -2,9 +2,21 @@ package task;
 
 import status.Status;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 public class SubTask extends Task {
     private Epic epic;
+
+
+    public SubTask(String nameOfTask, String description, Status status, Object object, Duration duration, LocalDateTime startTime) {
+        super(nameOfTask, description, status, startTime, duration);
+        String a = object.getClass().toString();
+        if (a.equals("class task.Epic")) {
+            this.epic = (Epic) object;
+        }
+    }
 
 
     public SubTask(String nameOfTask, String description, Status status, Object object) {
@@ -29,11 +41,10 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "nameOfTask='" + nameOfTask + '\'' +
-                ", status=" + status +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                '}';
+        if (this.startTime != null) {
+            return id + ",SubTask," + nameOfTask + "," + status + "," + description + "," + epic.getNameOfTask()
+                    + "," + startTime + "," + startTime.plus(duration) + ",";
+        }
+        return id + ",SubTask," + nameOfTask + "," + status + "," + description + "," + epic.getNameOfTask();
     }
 }

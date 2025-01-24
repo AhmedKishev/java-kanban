@@ -7,31 +7,31 @@ import status.Status;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubTaskTest {
-    public static Epic originalEpic;
-    public static SubTask originalSub;
+    public static Epic initialEpic;
+    public static SubTask initialSubTask;
 
 
     @BeforeEach
     public void createEpicAndSubTask1() {
-        originalEpic = new Epic("a", "b", Status.IN_PROGRESS);
-        originalSub = new SubTask("c", "d", Status.NEW, originalEpic);
+        initialEpic = new Epic("a", "b", Status.IN_PROGRESS);
+        initialSubTask = new SubTask("c", "d", Status.NEW, initialEpic);
     }
 
     @Test
     public void notMatchesSubTask1AndSubTask2() {
-        SubTask comparable = new SubTask("e", "f", Status.NEW, originalEpic);
-        assertFalse(comparable.equals(originalSub));
+        SubTask notSameSubTask = new SubTask("e", "f", Status.NEW, initialEpic);
+        assertNotEquals(notSameSubTask, initialSubTask);
     }
 
     @Test
     public void matchesSubTask1AndSubTask2() {
-        SubTask comparable = new SubTask("c", "d", Status.NEW, originalEpic);
-        assertTrue(comparable.equals(originalSub));
+        SubTask sameSubTask = new SubTask("c", "d", Status.NEW, initialEpic);
+        assertEquals(sameSubTask, initialSubTask);
     }
 
     @Test
-    public void SubTaskInConstuctorSubTask() {
-        SubTask subTask1 = new SubTask("a", "b", Status.NEW, originalSub);
-        assertNull(subTask1.getEpic());
+    public void SubTaskInConstructorSubTask() {
+        SubTask subTaskWithoutEpic = new SubTask("a", "b", Status.NEW, initialSubTask);
+        assertNull(subTaskWithoutEpic.getEpic());
     }
 }

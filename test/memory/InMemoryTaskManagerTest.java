@@ -8,11 +8,13 @@ import task.SubTask;
 import task.Task;
 
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest extends TaskManagerTest {
     private static InMemoryTaskManager taskManager;
 
 
@@ -109,6 +111,26 @@ class InMemoryTaskManagerTest {
         update.setStatus(Status.DONE);
         taskManager.updateTask(update);
         assertTrue(Status.DONE == taskManager.getOfIdTask(update).getStatus());
+    }
+
+    @Test
+    public void existsSubTaskEpic() {
+        Epic existEpic = new Epic("a", "b", Status.NEW);
+        SubTask exampleSubTask = new SubTask("a", "b", Status.NEW, existEpic);
+
+        assertEquals(exampleSubTask.getEpic(), existEpic);
+    }
+
+    @Test
+    public void IntersectionsOfIntervalsTime() {
+        LocalDateTime startTask = LocalDateTime.now();
+        LocalDateTime startOverlappingTask = LocalDateTime.now().plusMinutes(1);
+        Duration durationOfTasks = Duration.ofMinutes(4);
+        Task task = new Task("a", "b", Status.NEW, startTask, durationOfTasks);
+        Task overlappingTask = new Task("a", "b", Status.NEW, startOverlappingTask, durationOfTasks);
+
+        taskManager.addTask(task);
+        assertTrue(taskManager.intersectionOfTime(overlappingTask));
     }
 
 }

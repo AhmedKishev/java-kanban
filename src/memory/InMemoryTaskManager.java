@@ -6,30 +6,53 @@ import task.Epic;
 import task.SubTask;
 import task.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 public class InMemoryTaskManager<T extends Task> implements TaskManager {
-    private HashMap<Long, Task> tasks = new HashMap<>();
-    private HashMap<Long, Epic> epics = new HashMap<>();
-    private HashMap<Long, SubTask> subTasks = new HashMap<>();
-    private HistoryManager historyManager = new InMemoryHistoryManager();
-
+    protected HashMap<Long, Task> tasks = new HashMap<>();
+    protected HashMap<Long, Epic> epics = new HashMap<>();
+    protected HashMap<Long, SubTask> subTasks = new HashMap<>();
+    protected HistoryManager historyManager = new InMemoryHistoryManager();
+    private Comparator<Task> comparatorForPrioritizedTasks = (o1, o2) -> {
+        if (o1.getStartTime().isBefore(o2.getStartTime())) return 1;
+        return -1;
+    };
+    protected TreeSet<Task> prioritizedTasks = new TreeSet<Task>(comparatorForPrioritizedTasks);
 
     @Override
     public void addTask(Task task) {
-        tasks.put(task.getId(), task);
+        boolean isTask = false;
+        for (Long key : tasks.keySet()) {
+            if (tasks.get(key).getNameOfTask().equals(task.getNameOfTask())) {
+                isTask = true;
+                break;
+            }
+        }
+        if (task.getStartTime() != null) {
+            if (!intersectionOfTime(task)) prioritizedTasks.add(task);
+        }
+        if (!isTask) tasks.put(task.getId(), task);
     }
 
     @Override
     public void addEpic(Epic epic) {
-        epics.put(epic.getId(), epic);
         List<SubTask> subTasks = epic.getSubTasks();
-        for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
-            if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
-                this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
+        boolean isEpic = false;
+        for (Long key : epics.keySet()) {
+            if (epics.get(key).getNameOfTask().equals(epic.getNameOfTask())) isEpic = true;
+        }
+        if (!isEpic) {
+            epics.put(epic.getId(), epic);
+            for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
+                if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
+                    this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
+                }
             }
+        }
+        if (epic.getStartTime() != null) {
+            if (!intersectionOfTime(epic)) prioritizedTasks.add(epic);
         }
     }
 
@@ -42,131 +65,156 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     @Override
     public void addSubTasks(SubTask subTask) {
         subTasks.put(subTask.getId(), subTask);
+        if (subTask.getStartTime() != null) {
+            if (!intersectionOfTime(subTask)) prioritizedTasks.add(subTask);
+        }
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        for (Task task : tasks.values()) {
-            allTasks.add(task);
-        }
-        return allTasks;
+    public List<Task> getAllTasks() {
+        return tasks.values().stream().map(task -> {
+            return new Task(task.getNameOfTask(), task.getDescription(), task.getStatus());
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubTasks() {
-        ArrayList<SubTask> allSubTusks = new ArrayList<>();
-        for (SubTask subTask : subTasks.values()) {
-            allSubTusks.add(subTask);
-        }
-        return allSubTusks;
+    public List<SubTask> getAllSubTasks() {
+        return subTasks.values().stream().map(subTask -> {
+            return new SubTask(subTask.getNameOfTask(), subTask.getDescription(), subTask.getStatus(), subTask.getEpic());
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
-        ArrayList<Epic> allEpics = new ArrayList<>();
-        for (Epic epic : epics.values()) {
-            allEpics.add(epic);
-        }
-        return allEpics;
+    public List<Epic> getAllEpics() {
+        return epics.values().stream().map(epic -> {
+            return new Epic(epic.getNameOfTask(), epic.getDescription(), epic.getStatus());
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Task getOfIdTask(Task t) {
         long id = t.getId();
-        for (Task task : tasks.values()) {
-            if (task.getId() == id) {
-                historyManager.add(task);
-                return task;
-            }
+        Task findTask = tasks.values().stream().filter(task ->
+                task.getId() == id
+        ).findFirst().orElse(null);
+        if (findTask == null) return null;
+        else {
+            historyManager.add(findTask);
+            return findTask;
         }
-        return null;
     }
 
     @Override
     public SubTask getOfIdSubTask(SubTask s) {
         long id = s.getId();
-        for (SubTask subTask : subTasks.values()) {
-            if (subTask.getId() == id) {
-                historyManager.add(subTask);
-                return subTask;
-            }
+        SubTask findSubTask = subTasks.values().stream().filter(subTask ->
+                subTask.getId() == id
+        ).findFirst().orElse(null);
+        if (findSubTask == null) return null;
+        else {
+            historyManager.add(findSubTask);
+            return findSubTask;
         }
-        return null;
     }
 
     @Override
     public Epic getOfIdEpic(Epic e) {
         long id = e.getId();
-        for (Epic epic : epics.values()) {
-            if (epic.getId() == id) {
-                historyManager.add(epic);
-                return epic;
-            }
+        Epic findEpic = epics.values().stream().filter(epic ->
+                epic.getId() == id
+        ).findFirst().orElse(null);
+        if (findEpic == null) return null;
+        else {
+            historyManager.add(findEpic);
+            return findEpic;
         }
-        return null;
     }
 
     @Override
     public void updateTask(Task task) {
         tasks.put(task.getId(), task);
+        if (task.getStartTime() != null) prioritizedTasks.add(task);
     }
 
     @Override
     public void updateSubTask(SubTask subTask) {
         subTasks.put(subTask.getId(), subTask);
+        if (subTask.getStartTime() != null) prioritizedTasks.add(subTask);
         subTask.getEpic().statusCheck();
     }
 
     @Override
     public void updateEpic(Epic epic) {
         tasks.put(epic.getId(), epic);
+        if (epic.getStartTime() != null) prioritizedTasks.add(epic);
         epic.statusCheck();
     }
 
     @Override
     public void deleteOfIdTask(Task t) {
         long id = t.getId();
-        for (Task task : tasks.values()) {
-            if (task.getId() == id) {
-                tasks.remove(id);
-                historyManager.remove(t.getId());
-                Node node = new Node(task);
-                historyManager.removeNode(node);
-                return;
-            }
-        }
+        Optional<Task> findTask = tasks.values().stream().map(task -> {
+            if (task.getId() == id)
+                return task;
+            return null;
+        }).findFirst();
+        findTask.ifPresent(task -> {
+            tasks.remove(task);
+            historyManager.remove(t.getId());
+            Node node = new Node(task);
+            historyManager.removeNode(node);
+        });
     }
 
     @Override
     public void deleteOfIdSubTask(SubTask s) {
         long id = s.getId();
-        for (SubTask subTask : subTasks.values()) {
-            if (subTask.getId() == id) {
-                Epic epic = subTask.getEpic();
-                epic.removeSubTask(s);
-                subTask.getEpic().statusCheck();
-                subTasks.remove(id);
-                historyManager.remove(s.getId());
-                Node node = new Node(subTask);
-                historyManager.removeNode(node);
-                return;
-            }
-        }
+        Optional<SubTask> findSubTask = subTasks.values().stream().filter(subTask ->
+                subTask.getId() == id
+        ).findFirst();
+        findSubTask.ifPresent(subTask -> {
+            Epic epic = subTask.getEpic();
+            epic.removeSubTask(s);
+            subTask.getEpic().statusCheck();
+            subTasks.remove(id);
+            historyManager.remove(s.getId());
+            Node node = new Node(subTask);
+            historyManager.removeNode(node);
+        });
+    }
 
+    @Override
+    public boolean intersectionOfTime(Task task) {
+        Optional<Task> findTask = this.prioritizedTasks.stream().filter(task1 ->
+                task.getStartTime().isAfter(task1.getStartTime())
+                        && task.getStartTime().isBefore(task1.getEndTime())
+                        && task.getEndTime().isAfter(task1.getEndTime())
+                        || task.getEndTime().isAfter(task1.getStartTime()) &&
+                        task.getEndTime().isBefore(task1.getEndTime()) &&
+                        task.getStartTime().isBefore(task1.getStartTime())
+                        || task.getStartTime().isAfter(task1.getStartTime()) &&
+                        task.getStartTime().isBefore(task1.getEndTime()) &&
+                        task.getEndTime().isBefore(task1.getEndTime()) &&
+                        task.getEndTime().isAfter(task1.getStartTime())
+        ).findFirst();
+        return findTask.isPresent();
     }
 
     @Override
     public void deleteOfIdEpic(Epic e) {
         long id = e.getId();
-        for (Epic epic : epics.values()) {
-            if (epic.getId() == id) {
-                epics.remove(id);
-                Node node = new Node(epic);
-                historyManager.removeNode(node);
-                historyManager.remove(e.getId());
-            }
-        }
+        Optional<Epic> epicFind = epics.values().stream().filter(epic -> epic.getId() == id).findFirst();
+        epicFind.ifPresent(epic -> {
+            epics.remove(id);
+            Node node = new Node(epic);
+            historyManager.removeNode(node);
+            historyManager.remove(e.getId());
+        });
+    }
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        return this.prioritizedTasks;
     }
 
     @Override
@@ -200,9 +248,11 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     @Override
     public ArrayList<SubTask> getAllSubTasksOfEpic(Epic e) {
         long id = e.getId();
-        for (Epic epic : epics.values()) {
-            if (epic.getId() == id) return epic.getSubTasks();
+        Optional<Epic> findEpic = epics.values().stream().filter(epic -> epic.getId() == id).findFirst();
+        if (findEpic.isPresent()) {
+            findEpic.get().getSubTasks();
         }
         return null;
     }
 }
+

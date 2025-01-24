@@ -37,6 +37,58 @@ class InMemoryHistoryManagerTest {
 
 
     @Test
+    public void EmptyHistory() {
+        Task notWatch = new Task("a", "b", Status.NEW);
+        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        inMemoryTaskManager.addTask(notWatch);
+        assertNull(inMemoryTaskManager.getHistoryManager().getHistory());
+    }
+
+    @Test
+    public void deleteInHistoryStart() {
+        Task watch = new Task("a", "b", Status.NEW);
+        InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+        inMemoryHistoryManager.add(watch);
+        Node node = new Node(watch);
+        inMemoryHistoryManager.remove(watch.getId());
+        inMemoryHistoryManager.removeNode(node);
+        assertNull(inMemoryHistoryManager.getHistory());
+    }
+
+
+    @Test
+    public void deleteInHistoryInMid() {
+        Task watch = new Task("a", "b", Status.NEW);
+        Task watch1 = new Task("c", "d", Status.NEW);
+        Task watch2 = new Task("e", "f", Status.NEW);
+        InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+        inMemoryHistoryManager.add(watch);
+        inMemoryHistoryManager.add(watch1);
+        inMemoryHistoryManager.add(watch2);
+        Node node = new Node(watch1);
+        inMemoryHistoryManager.remove(watch1.getId());
+        inMemoryHistoryManager.removeNode(node);
+        assertEquals(2, inMemoryHistoryManager.getHistory().size());
+    }
+
+    @Test
+    public void deleteInHistoryInTail() {
+        Task watch = new Task("a", "b", Status.NEW);
+        Task watch1 = new Task("c", "d", Status.NEW);
+        InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+
+        inMemoryHistoryManager.add(watch);
+        inMemoryHistoryManager.add(watch1);
+        inMemoryHistoryManager.remove(watch1.getId());
+        Node node = new Node(watch1);
+        inMemoryHistoryManager.removeNode(node);
+        assertTrue(inMemoryHistoryManager.getHistory().get(0).equals(watch) &&
+                inMemoryHistoryManager.getHistory().size() == 1);
+    }
+
+    @Test
     public void equalsTaskAndElementHistoryManager() {
         Task original = new Task("a", "b", Status.NEW);
         InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
