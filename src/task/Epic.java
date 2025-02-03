@@ -10,10 +10,15 @@ import status.Status;
 
 public class Epic extends Task {
     private ArrayList<SubTask> subTasks = new ArrayList<>();
-    private LocalDateTime endTime;
+    private LocalDateTime endTime = LocalDateTime.now();
 
     public Epic(String nameOfTask, String description, Status status) {
         super(nameOfTask, description, status);
+    }
+
+    public Epic(Epic epic) {
+        super(epic.nameOfTask, epic.description, epic.status, epic.startTime, epic.duration);
+        endTime = startTime.plus(duration);
     }
 
     public void statusCheck() {
@@ -86,9 +91,9 @@ public class Epic extends Task {
     @Override
     public String toString() {
         if (startTime != null) {
-            return id + ",Epic," + nameOfTask + "," + status + "," + description + "," + startTime + "," + endTime + ",";
+            return nameOfTask + "," + status + "," + description + "," + startTime + "," + endTime;
         }
-        return id + ",Epic," + nameOfTask + "," + status + "," + description + ",";
+        return nameOfTask + "," + status + "," + description;
     }
 
     public ArrayList<SubTask> getSubTasks() {

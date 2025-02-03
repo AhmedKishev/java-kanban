@@ -11,14 +11,25 @@ public class Task {
     protected Status status;
     protected final long id;
     protected String description;
-    protected Duration duration;
-    protected LocalDateTime startTime;
+    protected Duration duration = Duration.ZERO;
+    protected LocalDateTime startTime = LocalDateTime.now();
 
 
     public LocalDateTime getStartTime() {
         return this.startTime;
     }
 
+
+    public Task(Task task) {
+        this.nameOfTask = task.nameOfTask;
+        this.status = task.status;
+        this.description = task.description;
+        if (!task.startTime.equals(null)) {
+            this.startTime = task.startTime;
+            this.duration = task.duration;
+        }
+        this.id = hashCode();
+    }
 
     public Task(String nameOfTask, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.nameOfTask = nameOfTask;
@@ -59,10 +70,10 @@ public class Task {
     @Override
     public String toString() {
         if (startTime != null) {
-            return id + ",Task," + nameOfTask + "," + status + "," + description + ","
+            return nameOfTask + "," + description + "," + status + ","
                     + "," + startTime + "," + startTime.plus(duration) + ",";
         }
-        return id + ",Task," + nameOfTask + "," + status + "," + description + ",";
+        return nameOfTask + "," + description + "," + status + ",";
     }
 
     public long getId() {
