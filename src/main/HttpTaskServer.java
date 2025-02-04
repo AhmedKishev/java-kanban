@@ -66,7 +66,7 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET": {
                     List<Task> list = managers.getDefault().getAllTasks();
-                    baseHttpHandler.sendText(exchange, "Tasks успешно получены", 200);
+                    baseHttpHandler.sendText(exchange, "Tasks received successfully", 200);
                     break;
                 }
                 case "POST": {
@@ -80,9 +80,9 @@ public class HttpTaskServer {
                     }
                     boolean isAdd = managers.getDefault().addTask(task);
                     if (isAdd) {
-                        baseHttpHandler.sendText(exchange, "Задача успешно добавлена!", 201);
+                        baseHttpHandler.sendText(exchange, "Task added successfully!", 201);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Данная задача пересекается с другой!", 406);
+                        baseHttpHandler.sendText(exchange, "This task overlaps with another!", 406);
                     }
                     break;
                 }
@@ -99,14 +99,14 @@ public class HttpTaskServer {
                     managers.getDefault().deleteOfIdTask(task);
                     int afterSize = managers.getDefault().getAllTasks().size();
                     if ((afterSize + 1) == beforeSize) {
-                        baseHttpHandler.sendText(exchange, "Задача удалена!", 200);
+                        baseHttpHandler.sendText(exchange, "Task deleted!", 200);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Не удалось удалить задачу", 404);
+                        baseHttpHandler.sendText(exchange, "Failed to delete task", 406);
                     }
                     break;
                 }
                 default:
-                    baseHttpHandler.sendText(exchange, "Ошибка обработки запроса", 404);
+                    baseHttpHandler.sendText(exchange, "Error processing request", 404);
             }
         }
     }
@@ -120,7 +120,7 @@ public class HttpTaskServer {
                 case "GET": {
                     String[] path = exchange.getRequestURI().getPath().split("/");
                     if (path.length == 2) {
-                        baseHttpHandler.sendText(exchange, "Epics успешно получены", 200);
+                        baseHttpHandler.sendText(exchange, "Epics successfully received", 200);
                     } else if (path.length == 3 && path[2].equals("subtasks")) {
                         InputStream inputStream = exchange.getRequestBody();
                         String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
@@ -132,8 +132,8 @@ public class HttpTaskServer {
                         }
                         List<SubTask> subTasksOfEpic = managers.getDefault().getAllSubTasksOfEpic(epic);
                         if (!subTasksOfEpic.isEmpty()) {
-                            baseHttpHandler.sendText(exchange, "SubTasks получены", 200);
-                        } else baseHttpHandler.sendText(exchange, "Эпика нет", 404);
+                            baseHttpHandler.sendText(exchange, "SubTasks received", 200);
+                        } else baseHttpHandler.sendText(exchange, "No epic", 404);
                     } else baseHttpHandler.sendText(exchange, "Not Found", 404);
                     break;
                 }
@@ -148,9 +148,9 @@ public class HttpTaskServer {
                     }
                     boolean isAdd = managers.getDefault().addEpic(epic);
                     if (isAdd) {
-                        baseHttpHandler.sendText(exchange, "Задача успешно добавлена!", 201);
+                        baseHttpHandler.sendText(exchange, "Task added successfully!", 201);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Данная задача пересекается с другой!", 406);
+                        baseHttpHandler.sendText(exchange, "This task overlaps with another!", 406);
                     }
                     break;
                 }
@@ -167,9 +167,9 @@ public class HttpTaskServer {
                     managers.getDefault().deleteOfIdEpic(epic);
                     int afterSize = managers.getDefault().getAllSubTasks().size();
                     if ((afterSize + 1) == beforeSize) {
-                        baseHttpHandler.sendText(exchange, "Задача удалена!", 200);
+                        baseHttpHandler.sendText(exchange, "Task deleted!", 200);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Не удалось удалить задачу", 404);
+                        baseHttpHandler.sendText(exchange, "Failed to delete task", 406);
                     }
                     break;
                 }
@@ -184,7 +184,7 @@ public class HttpTaskServer {
             String method = exchange.getRequestMethod();
             switch (method) {
                 case "GET": {
-                    baseHttpHandler.sendText(exchange, "SubTasks успешно получены", 200);
+                    baseHttpHandler.sendText(exchange, "SubTasks received successfully", 200);
                     break;
                 }
                 case "POST": {
@@ -198,9 +198,9 @@ public class HttpTaskServer {
                     }
                     boolean isAdd = managers.getDefault().addSubTasks(subTask);
                     if (isAdd) {
-                        baseHttpHandler.sendText(exchange, "Задача успешно добавлена!", 201);
+                        baseHttpHandler.sendText(exchange, "Task added successfully!", 201);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Данная задача пересекается с другой!", 406);
+                        baseHttpHandler.sendText(exchange, "This task overlaps with another!", 406);
                     }
                     break;
                 }
@@ -217,14 +217,14 @@ public class HttpTaskServer {
                     managers.getDefault().deleteOfIdSubTask(subTask);
                     int afterSize = managers.getDefault().getAllSubTasks().size();
                     if ((afterSize + 1) == beforeSize) {
-                        baseHttpHandler.sendText(exchange, "Задача удалена!", 200);
+                        baseHttpHandler.sendText(exchange, "Task deleted!", 200);
                     } else {
-                        baseHttpHandler.sendText(exchange, "Не удалось удалить задачу", 404);
+                        baseHttpHandler.sendText(exchange, "Couldn't delete issue", 406);
                     }
                     break;
                 }
                 default:
-                    baseHttpHandler.sendText(exchange, "Ошибка обработки запроса", 404);
+                    baseHttpHandler.sendText(exchange, "Request processing error", 404);
             }
         }
     }
@@ -237,7 +237,7 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET": {
                     HistoryManager historyManager = managers.getDefault().getHistoryManager();
-                    baseHttpHandler.sendText(exchange, "История получена", 200);
+                    baseHttpHandler.sendText(exchange, "History received", 200);
                     break;
                 }
                 default:
@@ -255,7 +255,7 @@ public class HttpTaskServer {
             switch (method) {
                 case "GET": {
                     Set<Task> prioritizedTasks = managers.getDefault().getPrioritizedTasks();
-                    baseHttpHandler.sendText(exchange, "Задачи с приоритетами получены", 200);
+                    baseHttpHandler.sendText(exchange, "Tasks with priorities have been received", 200);
                     break;
                 }
                 default:
