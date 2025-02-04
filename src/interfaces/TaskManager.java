@@ -10,13 +10,13 @@ import java.util.TreeSet;
 
 public interface TaskManager {
 
-    void addTask(Task task);
+    boolean addTask(Task task);
 
-    void addEpic(Epic epic);
+    boolean addEpic(Epic epic);
 
     HistoryManager getHistoryManager();
 
-    void addSubTasks(SubTask subTask);
+    boolean addSubTasks(SubTask subTask);
 
     List<Task> getAllTasks();
 

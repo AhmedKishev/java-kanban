@@ -22,7 +22,7 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     protected TreeSet<Task> prioritizedTasks = new TreeSet<Task>(comparatorForPrioritizedTasks);
 
     @Override
-    public void addTask(Task task) {
+    public boolean addTask(Task task) {
         boolean isTask = false;
         for (Long key : tasks.keySet()) {
             if (tasks.get(key).getNameOfTask().equals(task.getNameOfTask())) {
@@ -31,20 +31,26 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
             }
         }
         if (task.getStartTime() != null) {
-            if (!intersectionOfTime(task)) prioritizedTasks.add(task);
+            if (!intersectionOfTime(task) && !isTask) {
+                prioritizedTasks.add(task);
+                tasks.put(task.getId(), task);
+                return true;
+            }
+        } else if (!isTask) {
+            tasks.put(task.getId(), task);
+            return true;
         }
-        if (!isTask) tasks.put(task.getId(), task);
+        return false;
     }
 
     @Override
-    public void addEpic(Epic epic) {
+    public boolean addEpic(Epic epic) {
         List<SubTask> subTasks = epic.getSubTasks();
         boolean isEpic = false;
         for (Long key : epics.keySet()) {
             if (epics.get(key).getNameOfTask().equals(epic.getNameOfTask())) isEpic = true;
         }
         if (!isEpic) {
-            epics.put(epic.getId(), epic);
             for (int itNewSubTask = 0; itNewSubTask < subTasks.size(); itNewSubTask++) { //добавляем из эпика сабтаски, если их еще нету в мапе
                 if (!this.subTasks.containsKey(subTasks.get(itNewSubTask).getId())) {
                     this.subTasks.put(subTasks.get(itNewSubTask).getId(), subTasks.get(itNewSubTask));
@@ -52,8 +58,13 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
             }
         }
         if (epic.getStartTime() != null) {
-            if (!intersectionOfTime(epic)) prioritizedTasks.add(epic);
+            if (!intersectionOfTime(epic) && !isEpic) {
+                prioritizedTasks.add(epic);
+                epics.put(epic.getId(), epic);
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
@@ -63,11 +74,15 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
 
 
     @Override
-    public void addSubTasks(SubTask subTask) {
-        subTasks.put(subTask.getId(), subTask);
+    public boolean addSubTasks(SubTask subTask) {
         if (subTask.getStartTime() != null) {
-            if (!intersectionOfTime(subTask)) prioritizedTasks.add(subTask);
+            if (!intersectionOfTime(subTask)) {
+                prioritizedTasks.add(subTask);
+                subTasks.put(subTask.getId(), subTask);
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
@@ -153,13 +168,11 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
     @Override
     public void deleteOfIdTask(Task t) {
         long id = t.getId();
-        Optional<Task> findTask = tasks.values().stream().map(task -> {
-            if (task.getId() == id)
-                return task;
-            return null;
-        }).findFirst();
+        Optional<Task> findTask = tasks.values().stream().filter(task ->
+                task.getId() == id
+        ).findFirst();
         findTask.ifPresent(task -> {
-            tasks.remove(task);
+            tasks.remove(t.getId());
             historyManager.remove(t.getId());
             Node node = new Node(task);
             historyManager.removeNode(node);
@@ -173,9 +186,6 @@ public class InMemoryTaskManager<T extends Task> implements TaskManager {
                 subTask.getId() == id
         ).findFirst();
         findSubTask.ifPresent(subTask -> {
-            Epic epic = subTask.getEpic();
-            epic.removeSubTask(s);
-            subTask.getEpic().statusCheck();
             subTasks.remove(id);
             historyManager.remove(s.getId());
             Node node = new Node(subTask);

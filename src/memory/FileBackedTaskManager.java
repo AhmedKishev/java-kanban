@@ -18,15 +18,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String pathFile = "C:/Users/Astemir/IdeaProjects/java-kanban/src/filesformanager/FileBackedTaskManager.txt";
 
     @Override
-    public void addTask(Task task) {
+    public boolean addTask(Task task) {
         super.addTask(task);
         save();
+        return true;
     }
 
     @Override
-    public void addEpic(Epic epic) {
+    public boolean addEpic(Epic epic) {
         super.addEpic(epic);
         save();
+        return true;
     }
 
     @Override
@@ -35,9 +37,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void addSubTasks(SubTask subTask) {
+    public boolean addSubTasks(SubTask subTask) {
         super.addSubTasks(subTask);
         save();
+        return true;
     }
 
     @Override
@@ -191,10 +194,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     SubTask subTaskFromFile;
                     if (line.length == 8) {
                         LocalDateTime startTime = LocalDateTime.parse(line[6]);
-                        ;
                         LocalDateTime endTime = LocalDateTime.parse(line[7]);
                         Duration duration = Duration.between(startTime, endTime);
-                        subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask, duration, startTime);
+                        subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask,startTime, duration);
                     } else subTaskFromFile = new SubTask(nameTask, discriptionTask, status, epicForSubTask);
                     epicForSubTask.addSubTask(subTaskFromFile);
                     loadTasks.addSubTasks(subTaskFromFile);
